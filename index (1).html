@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blessing Dediare — Data Analytics Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --accent: #c8f04a;
+    --accent2: #4af0b8;
+    --text: #e8e8e8;
+    --muted: #888;
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ---- NOISE OVERLAY ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 3rem;
+    background: rgba(14,14,14,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%;
+    right: -2rem;
+    transform: translateY(-50%);
+    font-family: var(--serif);
+    font-size: clamp(8rem, 18vw, 18rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200,240,74,0.07);
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift { from { transform: translateY(-50%) translateX(0); } to { transform: translateY(-52%) translateX(-2rem); } }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #0e0e0e;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1.0;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+
+  .hero-sub {
+    max-width: 560px;
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+  .btn {
+    padding: 0.75rem 1.75rem;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: #0e0e0e; border: none; }
+  .btn-primary:hover { background: #d8ff5a; transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.3rem; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- SECTIONS ---- */
+  section { padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 3rem;
+  }
+
+  /* ---- SKILLS ---- */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .skill-card-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .skill-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    background: rgba(200,240,74,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(200,240,74,0.2);
+    border-radius: 100px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  /* ---- PROJECTS ---- */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .project-card:hover { border-color: rgba(200,240,74,0.3); transform: translateY(-4px); }
+  .project-card:hover::before { opacity: 1; }
+  .project-year { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .project-card h3 { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.75rem; }
+  .project-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem; line-height: 1.7; }
+  .project-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  /* ---- EXPERIENCE ---- */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0.5rem; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .timeline-item { position: relative; margin-bottom: 3rem; }
+  .timeline-dot {
+    position: absolute;
+    left: -2.4rem;
+    top: 0.4rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(200,240,74,0.15);
+  }
+  .timeline-date { font-size: 0.8rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .timeline-role { font-weight: 600; font-size: 1.05rem; }
+  .timeline-company { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
+  .timeline-item ul { padding-left: 1.2rem; color: var(--muted); font-size: 0.9rem; }
+  .timeline-item li { margin-bottom: 0.4rem; line-height: 1.6; }
+
+  /* ---- CERTIFICATES ---- */
+  .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+  .cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: border-color 0.2s;
+  }
+  .cert-card:hover { border-color: var(--accent2); }
+  .cert-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .cert-name { font-size: 0.9rem; font-weight: 500; }
+  .cert-issuer { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* ---- CONTACT ---- */
+  .contact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-box::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(200,240,74,0.12), transparent 70%);
+    pointer-events: none;
+  }
+  .contact-box h2 { margin-bottom: 1rem; }
+  .contact-box p { color: var(--muted); max-width: 440px; margin: 0 auto 2rem; }
+  .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    text-align: center;
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; }
+    .contact-box { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Blessing Dediare</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-text">DATA</div>
+  <span class="hero-tag">Available for Werkstudent roles · Berlin</span>
+  <h1>Turning data into<br/><em>decisions.</em></h1>
+  <p class="hero-sub">B.Sc. student in Digital Business & Data Science with real-world experience in Excel dashboards, financial KPI reporting, and operational analytics.</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="mailto:dedbless@gmail.com" class="btn btn-ghost">Get in Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div>
+      <div class="stat-num">5</div>
+      <div class="stat-label">Certificates</div>
+    </div>
+    <div>
+      <div class="stat-num">2</div>
+      <div class="stat-label">Key Projects</div>
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">What I work with</p>
+  <h2>Skills & Tools</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-card-icon">📊</div>
+      <h3>Data & Reporting</h3>
+      <div class="skill-tags">
+        <span class="tag">Excel (Advanced)</span>
+        <span class="tag">Pivot Tables</span>
+        <span class="tag">VLOOKUP</span>
+        <span class="tag">Dashboards</span>
+        <span class="tag">Power BI</span>
+        <span class="tag">Ad-hoc Analysis</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">💻</div>
+      <h3>Programming & Querying</h3>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">SQL</span>
+        <span class="tag">Data Querying</span>
+        <span class="tag">Machine Learning</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">🏢</div>
+      <h3>Systems</h3>
+      <div class="skill-tags">
+        <span class="tag">SAP</span>
+        <span class="tag">ERP / CRM</span>
+        <span class="tag">Microsoft 365</span>
+        <span class="tag">SharePoint</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon">💰</div>
+      <h3>Finance & Business</h3>
+      <div class="skill-tags">
+        <span class="tag">Financial Reporting</span>
+        <span class="tag">KPI Tracking</span>
+        <span class="tag">Procurement</span>
+        <span class="tag">SOX Documentation</span>
+        <span class="tag">CapEx</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">Featured Work</p>
+  <h2>Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-year">2025 · University Project</div>
+      <h3>Procurement Spend Analysis Dashboard</h3>
+      <p>Analysed 300+ simulated procurement line items across supplier categories, cost centres, and monthly spend cycles. Identified top spend categories, flagged cost anomalies, and tracked budget vs. actual variances with an automated one-page summary report.</p>
+      <div class="project-tools">
+        <span class="tag">Excel</span>
+        <span class="tag">Pivot Tables</span>
+        <span class="tag">VLOOKUP</span>
+        <span class="tag">Conditional Formatting</span>
+        <span class="tag">Data Validation</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-year">2025 · Controlling Module</div>
+      <h3>Financial KPI Tracker — Budget vs. Actual Model</h3>
+      <p>Tracked 6 financial KPIs (revenue variance, cost overrun %, headcount cost, EBITDA margin) over 12 months for a simulated business unit. Built a dynamic input sheet with auto-updating charts and a one-page executive summary for non-technical stakeholders.</p>
+      <div class="project-tools">
+        <span class="tag">Excel</span>
+        <span class="tag">Financial Reporting</span>
+        <span class="tag">KPI Modelling</span>
+        <span class="tag">Data Visualisation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-label">Work History</p>
+  <h2>Experience</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Mar 2025 – Present</div>
+      <div class="timeline-role">Event Operations</div>
+      <div class="timeline-company">Fotografiska Berlin · Berlin, Germany</div>
+      <ul>
+        <li>Built and maintained operational Excel dashboards tracking attendance, turnaround times, and issue logs</li>
+        <li>Validated daily operational metrics, ensuring accuracy across all reporting outputs</li>
+        <li>Reduced manual coordination by 25% and improved efficiency by 15–20% through workflow analysis</li>
+        <li>Prepared ad-hoc analyses and summaries for senior management</li>
+      </ul>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Sep 2022 – Jul 2024</div>
+      <div class="timeline-role">Production Associate — Data & Quality</div>
+      <div class="timeline-company">Tesla · Berlin, Germany</div>
+      <ul>
+        <li>Maintained production and quality data across shifts aligned with SOX documentation standards</li>
+        <li>Used ERP/manufacturing systems for data entry, traceability, and asset documentation</li>
+        <li>Drove a 10% productivity improvement through cross-functional data review and bottleneck identification</li>
+        <li>Gained exposure to factory asset management and regulated financial data workflows</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certificates">
+  <p class="section-label">Credentials</p>
+  <h2>Certificates</h2>
+  <div class="certs-grid">
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name">Microsoft Excel Mastery</div>
+        <div class="cert-issuer">Udemy · 2024</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name">SQL for Data Science</div>
+        <div class="cert-issuer">UC Davis / Coursera · 2024</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name">Project Management</div>
+        <div class="cert-issuer">Udemy · 2024</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name">Applied ML in Python</div>
+        <div class="cert-issuer">University of Michigan / Coursera · 2026</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name">SAP Foundations</div>
+        <div class="cert-issuer">SAP Learning Hub · 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-box">
+    <p class="section-label" style="text-align:center;">Let's connect</p>
+    <h2>Open to Werkstudent<br/>opportunities in Berlin</h2>
+    <p>Looking for a part-time role in Data Analytics or Procurement Finance. Available immediately.</p>
+    <div class="contact-links">
+      <a href="mailto:dedbless@gmail.com" class="btn btn-primary">dedbless@gmail.com</a>
+      <a href="https://linkedin.com/in/blessingdediare" target="_blank" class="btn btn-ghost">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Blessing Dediare · Built with HTML & CSS · Berlin, Germany
+</footer>
+
+</body>
+</html>
